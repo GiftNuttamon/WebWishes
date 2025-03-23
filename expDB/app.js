@@ -6,19 +6,7 @@ const db = require('./database');
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: 'http://localhost:3000',  // URL ของ frontend
-  credentials: true
-}));
-
-app.get('/users', (req, res) => {
-  //mock data user
-  res.json([
-    {id: 1, name: 'John', email: 'john@example.com'},
-    {id: 2, name: 'Jane', email: 'jane@example.com'},
-    {id: 3, name: 'Jim', email: 'jim@example.com'},
-  ]);
-});
+app.use(cors());  // อนุญาตทุก origin
 
 // Registration endpoint
 app.post('/register', (req, res) => {
@@ -110,6 +98,46 @@ app.post('/login', (req, res) => {
   });
 });
 
+// Add wish endpoint
+app.post('/submit-wish', (req, res) => {
+  const { planetId, wisherName, wishText } = req.body;
+  
+  const query = 'INSERT INTO wishes (planet_id, wisher_name, wish_text) VALUES (?, ?, ?)';
+  db.query(query, [planetId, wisherName, wishText], (err, result) => {
+    if (err) {
+      console.error('Error saving wish:', err);
+      return res.json({ success: false, message: 'Failed to save wish' });
+    }
+    res.json({ success: true, message: 'Wish saved successfully' });
+  });
+});
+
+// ดึงคำอธิษฐานทั้งหมด
+app.get('/wishes', (req, res) => {
+  const query = 'SELECT * FROM wishes ORDER BY created_at DESC';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching wishes:', err);
+      return res.status(500).json({ error: 'Failed to fetch wishes' });
+    }
+    res.json(results);
+  });
+});
+
+// ดึงคำอธิษฐานตามดาว
+app.get('/wishes/:planetId', (req, res) => {
+  const { planetId } = req.params;
+  const query = 'SELECT * FROM wishes WHERE planet_id = ? ORDER BY created_at DESC';
+  db.query(query, [planetId], (err, results) => {
+    if (err) {
+      console.error('Error fetching wishes:', err);
+      return res.status(500).json({ error: 'Failed to fetch wishes' });
+    }
+    res.json(results);
+  });
+});
+
+// หรือระบุ port ที่แน่นอน
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

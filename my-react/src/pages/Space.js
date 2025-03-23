@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../components/NavBar';
 
 const Space = () => {
   const [showModal, setShowModal] = useState(false);
@@ -86,123 +87,210 @@ const Space = () => {
   };
 
   return (
-    <Container 
-      fluid 
-      className="space-container vh-100 position-relative"
-      style={{
-        backgroundColor: '#000',
-        overflow: 'hidden'
-      }}
-    >
-      <div className="solar-system"
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 1
-          }}
-        >
-          <img
-            src={planets[0].image}
-            alt={planets[0].name}
-            onClick={() => handlePlanetClick(planets[0])}
-            style={{
-              cursor: 'pointer',
-              transition: 'transform 0.3s',
-              width: '200px',
-            }}
-          />
-        </div>
-
-        {planets.slice(1).map((planet, index) => {
-          const angle = (index * (360 / 8)) * (Math.PI / 180);
-          const radius = 300;
-          const x = Math.cos(angle) * radius;
-          const y = Math.sin(angle) * radius;
-
-          let planetSize;
-          switch(planet.id) {
-            case 'jupiter': planetSize = 100; break;
-            case 'saturn': planetSize = 90; break;
-            case 'uranus': planetSize = 70; break;
-            case 'neptune': planetSize = 68; break;
-            case 'earth': planetSize = 40; break;
-            case 'venus': planetSize = 38; break;
-            case 'mars': planetSize = 35; break;
-            case 'mercury': planetSize = 30; break;
-            default: planetSize = 40;
+    <>
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
           }
 
-          return (
-            <div
-              key={planet.id}
+          @keyframes glow {
+            0% { filter: drop-shadow(0 0 10px #ff6b00); }
+            100% { filter: drop-shadow(0 0 20px #ff6b00); }
+          }
+
+          .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+            animation: twinkle 5s infinite;
+            z-index: 0;
+          }
+
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.9; }
+          }
+
+          .planet-image {
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+
+          .planet-image:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.5)) !important;
+          }
+
+          .navbar {
+            position: relative;
+            z-index: 1000;
+            background-color: #212529 !important;
+          }
+        `}
+      </style>
+
+      <NavBar />
+      <Container
+        fluid
+        className="space-container vh-100 position-relative"
+        style={{
+          backgroundColor: '#0a0a2e',
+          overflow: 'hidden',
+          background: `url('/img/moonbg.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="stars" style={{ zIndex: 1 }}></div>
+
+        <div className="solar-system"
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '50px 0'
+          }}
+        >
+          {/* ดวงอาทิตย์ */}
+          <div
+            style={{
+              marginBottom: '50px',
+              animation: 'glow 2s infinite alternate'
+            }}
+          >
+            <img
+              src={planets[0].image}
+              alt={planets[0].name}
+              onClick={() => handlePlanetClick(planets[0])}
+              className="planet-image"
               style={{
-                position: 'absolute',
-                left: `calc(50% + ${x}px)`,
-                top: `calc(50% + ${y}px)`,
-                transform: 'translate(-50%, -50%)',
-                zIndex: 0
+                width: '150px',
+                filter: 'drop-shadow(0 0 10px #ff6b00)',
+              }}
+            />
+          </div>
+
+          {/* ดาวเคราะห์ */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '40px',
+            padding: '20px'
+          }}>
+            {planets.slice(1).map((planet, index) => {
+              let planetSize;
+              switch (planet.id) {
+                case 'jupiter': planetSize = 100; break;
+                case 'saturn': planetSize = 90; break;
+                case 'uranus': planetSize = 70; break;
+                case 'neptune': planetSize = 68; break;
+                case 'earth': planetSize = 60; break;
+                case 'venus': planetSize = 58; break;
+                case 'mars': planetSize = 55; break;
+                case 'mercury': planetSize = 50; break;
+                default: planetSize = 60;
+              }
+
+              return (
+                <div
+                  key={planet.id}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    animation: `float ${3 + index * 0.5}s infinite alternate ease-in-out`
+                  }}
+                >
+                  <img
+                    src={planet.image}
+                    alt={planet.name}
+                    onClick={() => handlePlanetClick(planet)}
+                    className="planet-image"
+                    style={{
+                      width: `${planetSize}px`,
+                      filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.3))'
+                    }}
+                  />
+                  <span style={{
+                    color: '#fff',
+                    marginTop: '10px',
+                    fontSize: '0.9rem',
+                    textShadow: '0 0 5px rgba(255,255,255,0.5)'
+                  }}>
+                    {planet.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Modal */}
+        <Modal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          centered
+          className="space-modal"
+        >
+          <Modal.Header closeButton style={{
+            background: 'linear-gradient(to right, #1a1a4a, #0a0a2e)',
+            color: 'white',
+            border: '1px solid rgba(255,255,255,0.1)'
+          }}>
+            <Modal.Title>{selectedPlanet?.name}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{
+            background: '#0a0a2e',
+            color: 'white',
+            border: '1px solid rgba(255,255,255,0.1)',
+            padding: '20px'
+          }}>
+            <img
+              src={selectedPlanet?.image}
+              alt={selectedPlanet?.name}
+              style={{
+                width: '120px',
+                display: 'block',
+                margin: '0 auto 20px',
+                filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))'
+              }}
+            />
+            <h5 style={{ color: '#4a9eff' }}>ข้อมูล</h5>
+            <p>{selectedPlanet?.info}</p>
+            <h5 style={{ color: '#4a9eff' }}>ความเชื่อ</h5>
+            <p>{selectedPlanet?.belief}</p>
+          </Modal.Body>
+          <Modal.Footer style={{
+            background: '#0a0a2e',
+            border: '1px solid rgba(255,255,255,0.1)'
+          }}>
+            <Button variant="outline-light" onClick={() => setShowModal(false)}>
+              ปิด
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleWishClick}
+              style={{
+                background: 'linear-gradient(to right, #4a9eff, #2d5cfe)',
+                border: 'none'
               }}
             >
-              <img
-                src={planet.image}
-                alt={planet.name}
-                onClick={() => handlePlanetClick(planet)}
-                style={{
-                  cursor: 'pointer',
-                  transition: 'transform 0.3s',
-                  width: `${planetSize}px`,
-                  '&:hover': {
-                    transform: 'scale(1.1)'
-                  }
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-
-      <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        centered
-        className="space-modal"
-      >
-        <Modal.Header closeButton style={{ background: '#1a1a1a', color: 'white', border: '1px solid #444' }}>
-          <Modal.Title>{selectedPlanet?.name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ background: '#1a1a1a', color: 'white', border: '1px solid #444' }}>
-          <img 
-            src={selectedPlanet?.image} 
-            alt={selectedPlanet?.name}
-            style={{ width: '100px', display: 'block', margin: '0 auto 20px' }}
-          />
-          <h5>ข้อมูล</h5>
-          <p>{selectedPlanet?.info}</p>
-          <h5>ความเชื่อ</h5>
-          <p>{selectedPlanet?.belief}</p>
-        </Modal.Body>
-        <Modal.Footer style={{ background: '#1a1a1a', border: '1px solid #444' }}>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            ปิด
-          </Button>
-          <Button variant="primary" onClick={handleWishClick}>
-            ขอพร
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Container>
+              ขอพร
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Container>
+    </>
   );
 };
 
