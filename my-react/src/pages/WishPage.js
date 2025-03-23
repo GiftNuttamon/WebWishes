@@ -31,11 +31,24 @@ const WishPage = () => {
       fluid 
       className="vh-100 d-flex align-items-center justify-content-center"
       style={{
-        background: 'linear-gradient(to bottom, #000033, #000066)',
         position: 'relative',
         overflow: 'hidden'
       }}
     >
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -1
+        }}
+      >
+        <source src="/mp4/bg_mp4.mp4" type="video/mp4" />
+      </video>
       <div className="stars"></div>
       <Card 
         className="wish-card"
