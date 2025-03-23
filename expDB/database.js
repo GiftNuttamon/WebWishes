@@ -3,14 +3,16 @@ const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database:"myweb",
+  database: "myweb",
   multipleStatements: true
 });
-connection.connect(function(err){
-   if(!err){
-       console.log("MySQL Connected");
-   }else{
-       console.log("Connection failed");
-   }
+
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log("MySQL Connected");
 });
+
 module.exports = connection;
