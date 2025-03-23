@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Card } from 'react-bootstrap';
 
@@ -6,6 +6,7 @@ const WishPage = () => {
   const { planetId } = useParams();
   const [wish, setWish] = useState('');
   const navigate = useNavigate();
+  const videoRef = useRef(null);
 
   const planetInfo = {
     sun: { name: 'ดวงอาทิตย์', image: '/img/5.png' },
@@ -26,6 +27,27 @@ const WishPage = () => {
     navigate('/space');
   };
 
+  useEffect(() => {
+    const video = videoRef.current;
+    let forward = true;
+
+    const handleTimeUpdate = () => {
+      if (forward && video.currentTime >= video.duration - 0.5) {
+        forward = false;
+        video.playbackRate = -1;
+      } else if (!forward && video.currentTime <= 0.5) {
+        forward = true;
+        video.playbackRate = 1;
+      }
+    };
+
+    video.addEventListener('timeupdate', handleTimeUpdate);
+
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+  }, []);
+
   return (
     <Container 
       fluid 
@@ -36,8 +58,8 @@ const WishPage = () => {
       }}
     >
       <video
+        ref={videoRef}
         autoPlay
-        loop
         muted
         style={{
           position: 'absolute',
