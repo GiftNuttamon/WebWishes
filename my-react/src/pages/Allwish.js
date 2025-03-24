@@ -7,6 +7,7 @@ const Allwish = () => {
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const planets = [
     { id: 'sun', name: 'ดวงอาทิตย์', image: '/img/5.png' },
@@ -54,89 +55,143 @@ const Allwish = () => {
     animation: 'pulse 2s infinite',
   };
 
+  // เพิ่มฟังก์ชันสำหรับกำหนดสีตามดาว
+  const getPlanetHeaderStyle = (planetId) => {
+    const colors = {
+      sun: 'rgba(255, 165, 0, 0.3)',      // สีส้ม
+      mercury: 'rgba(169, 169, 169, 0.3)', // สีเทา
+      venus: 'rgba(255, 198, 89, 0.3)',    // สีเหลืองอมส้ม
+      earth: 'rgba(100, 149, 237, 0.3)',   // สีฟ้า
+      mars: 'rgba(255, 69, 0, 0.3)',       // สีแดง
+      jupiter: 'rgba(255, 140, 0, 0.3)',   // สีส้มเข้ม
+      saturn: 'rgba(218, 165, 32, 0.3)',   // สีทอง
+      uranus: 'rgba(173, 216, 230, 0.3)',  // สีฟ้าอ่อน
+      neptune: 'rgba(0, 0, 128, 0.3)',     // สีน้ำเงินเข้ม
+    };
+    return {
+      background: selectedPlanet ? colors[selectedPlanet] : 'rgba(0, 255, 153, 0.2)',
+      borderBottom: `2px solid ${selectedPlanet ? colors[selectedPlanet].replace('0.3', '0.8') : 'rgba(0, 255, 153, 0.5)'}`,
+      color: '#fff',
+      textShadow: '0 0 10px rgba(255, 255, 255, 0.5)'
+    };
+  };
+
+  // เพิ่มฟังก์ชันสำหรับกรองข้อมูล
+  const filteredWishes = wishes.filter(wish => 
+    wish.wisher_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    wish.wish_text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    planets.find(p => p.id === wish.planet_id)?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div style={{
-      backgroundColor: '#000033',
+      backgroundImage: 'url("/img/Allwishbg.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'fixed',
       minHeight: '100vh',
-      paddingBottom: '2rem'
+      paddingBottom: '2rem',
+      position: 'relative'
     }}>
-      <NavBar />
-      <Container className="mt-4">
-        <div className="text-center mb-4">
-          <h2 className="mb-4 cosmic-title" 
-              style={{
-                color: '#fff',
-                textShadow: '0 0 10pxrgb(0, 0, 0), 0 0 20px #00ff99, 0 0 30px #00ff99',
-                fontFamily: "'Arial', sans-serif",
-                fontSize: '2.5rem',
-                letterSpacing: '3px'
-              }}>
-            ✨ คำอธิษฐานทั้งหมด ✨
-          </h2>
-          <div className="d-flex justify-content-center flex-wrap gap-3 mb-4">
-            {planets.map((planet) => (
-              <Image
-                key={planet.id}
-                src={planet.image}
-                alt={planet.name}
-                style={{
-                  ...planetImageStyle,
-                  opacity: selectedPlanet === planet.id ? 1 : 0.5,
-                  transform: selectedPlanet === planet.id ? 'scale(1.2)' : 'scale(1)',
-                }}
-                onClick={() => setSelectedPlanet(selectedPlanet === planet.id ? null : planet.id)}
-                title={planet.name}
-              />
-            ))}
-          </div>
-        </div>
+      {/* ลบ div overlay ออกทั้งหมด */}
 
-        {isLoading && <div className="text-center">กำลังโหลดข้อมูล...</div>}
-        {error && <div className="text-center text-danger">{error}</div>}
-        {!isLoading && !error && (
-          <Table striped bordered hover 
-            style={{
-              background: 'rgba(0, 0, 0, 0.7)',
-              color: '#fff',
-              borderRadius: '15px',
-              overflow: 'hidden',
-              boxShadow: '0 0 20px rgba(0, 255, 153, 0.3)'
-            }}>
-            <thead>
-              <tr style={{
-                background: 'rgba(0, 255, 153, 0.2)',
-                borderBottom: '2px solid rgba(0, 255, 153, 0.5)'
+      {/* ปรับ z-index ของ content div ให้เป็น 1 แทน */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <NavBar />
+        <Container className="mt-4">
+          <div className="text-center mb-4">
+            <h2 className="mb-4 cosmic-title" 
+                style={{
+                  color: '#fff',
+                  textShadow: '0 0 10pxrgb(0, 0, 0), 0 0 20px #00ff99, 0 0 30px #00ff99',
+                  fontFamily: "'Arial', sans-serif",
+                  fontSize: '2.5rem',
+                  letterSpacing: '3px'
+                }}>
+              ✨ คำอธิษฐานทั้งหมด ✨
+            </h2>
+            <div className="d-flex justify-content-center flex-wrap gap-3 mb-4">
+              {planets.map((planet) => (
+                <Image
+                  key={planet.id}
+                  src={planet.image}
+                  alt={planet.name}
+                  style={{
+                    ...planetImageStyle,
+                    opacity: selectedPlanet === planet.id ? 1 : 0.5,
+                    transform: selectedPlanet === planet.id ? 'scale(1.2)' : 'scale(1)',
+                  }}
+                  onClick={() => setSelectedPlanet(selectedPlanet === planet.id ? null : planet.id)}
+                  title={planet.name}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* เพิ่มส่วน Search */}
+          <div className="d-flex justify-content-end mb-3">
+            <input
+              type="text"
+              placeholder="ค้นหา..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '20px',
+                border: '2px solid rgba(0, 255, 153, 0.3)',
+                background: 'rgba(0, 0, 0, 0.7)',
+                color: '#fff',
+                width: '250px',
+                outline: 'none'
+              }}
+            />
+          </div>
+
+          {isLoading && <div className="text-center">กำลังโหลดข้อมูล...</div>}
+          {error && <div className="text-center text-danger">{error}</div>}
+          {!isLoading && !error && (
+            <Table striped bordered hover 
+              style={{
+                background: 'rgba(0, 0, 0, 0.7)',
+                color: '#fff',
+                borderRadius: '15px',
+                overflow: 'hidden',
+                boxShadow: '0 0 20px rgba(0, 255, 153, 0.3)'
               }}>
-                <th>ดวงดาว</th>
-                <th>ชื่อผู้อธิษฐาน</th>
-                <th>คำอธิษฐาน</th>
-                <th>วันที่</th>
-              </tr>
-            </thead>
-            <tbody>
-              {wishes.length === 0 ? (
-                <tr>
-                  <td colSpan="4" className="text-center">ไม่พบข้อมูลคำอธิษฐาน</td>
+              <thead>
+                <tr style={getPlanetHeaderStyle(selectedPlanet)}>
+                  <th>ดวงดาว</th>
+                  <th>ชื่อผู้อธิษฐาน</th>
+                  <th>คำอธิษฐาน</th>
+                  <th>วันที่</th>
                 </tr>
-              ) : (
-                wishes.map((wish) => (
-                  <tr key={wish.id} style={{
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      background: 'rgba(0, 255, 153, 0.1)',
-                    }
-                  }}>
-                    <td>{planets.find(p => p.id === wish.planet_id)?.name}</td>
-                    <td>{wish.wisher_name}</td>
-                    <td>{wish.wish_text}</td>
-                    <td>{new Date(wish.created_at).toLocaleDateString('th-TH')}</td>
+              </thead>
+              <tbody>
+                {filteredWishes.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="text-center">ไม่พบข้อมูลคำอธิษฐาน</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-        )}
-      </Container>
+                ) : (
+                  filteredWishes.map((wish) => (
+                    <tr key={wish.id} style={{
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        background: 'rgba(0, 255, 153, 0.1)',
+                      }
+                    }}>
+                      <td>{planets.find(p => p.id === wish.planet_id)?.name}</td>
+                      <td>{wish.wisher_name}</td>
+                      <td>{wish.wish_text}</td>
+                      <td>{new Date(wish.created_at).toLocaleDateString('th-TH')}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          )}
+        </Container>
+      </div>
 
       <style>{`
         @keyframes pulse {
