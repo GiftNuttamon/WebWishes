@@ -105,11 +105,21 @@ const WishPage = () => {
             </Card.Title>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-4">
+                <Form.Label
+                  style={{
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    marginBottom: '0.5rem',
+                    fontSize: '0.9rem',
+                    alignSelf: 'flex-start'
+                  }}
+                >
+                  Your Name...
+                </Form.Label>
                 <Form.Control
                   type="text"
                   value={wisherName}
                   onChange={(e) => setWisherName(e.target.value)}
-                  placeholder="กรุณาใส่ชื่อของคุณ..."
+                  placeholder="Your Name..."
                   style={{
                     background: 'rgba(255, 255, 255, 0.1)',
                     color: 'white',
@@ -125,12 +135,24 @@ const WishPage = () => {
                   }}
                   required
                 />
+                
+                <Form.Label
+                  style={{
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    marginBottom: '0.5rem',
+                    marginTop: '1rem',
+                    fontSize: '0.9rem',
+                    alignSelf: 'flex-start'
+                  }}
+                >
+                  Your Wish...
+                </Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={4}
                   value={wish}
                   onChange={(e) => setWish(e.target.value)}
-                  placeholder="เขียนคำอธิษฐานของคุณที่นี่..."
+                  placeholder="Your Wish..."
                   style={{
                     background: 'rgba(255, 255, 255, 0.1)',
                     color: 'white',
