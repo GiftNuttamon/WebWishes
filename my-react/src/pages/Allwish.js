@@ -46,7 +46,6 @@ const Allwish = () => {
     }
   };
 
-  // เพิ่ม CSS animation สำหรับไอคอนดวงดาว
   const planetImageStyle = {
     width: '50px',
     cursor: 'pointer',
@@ -55,7 +54,6 @@ const Allwish = () => {
     animation: 'pulse 2s infinite',
   };
 
-  // เพิ่มฟังก์ชันสำหรับกำหนดสีตามดาว
   const getPlanetHeaderStyle = (planetId) => {
     const colors = {
       sun: 'rgba(255, 165, 0, 0.3)',      // สีส้ม
@@ -76,9 +74,7 @@ const Allwish = () => {
     };
   };
 
-  // เพิ่มฟังก์ชันสำหรับกรองข้อมูล
   const filteredWishes = wishes
-    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at)) // เรียงจากเก่าไปใหม่
     .filter(wish => 
       wish.wisher_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       wish.wish_text.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -96,9 +92,6 @@ const Allwish = () => {
       paddingBottom: '2rem',
       position: 'relative'
     }}>
-      {/* ลบ div overlay ออกทั้งหมด */}
-
-      {/* ปรับ z-index ของ content div ให้เป็น 1 แทน */}
       <div style={{ position: 'relative', zIndex: 1 }}>
         <NavBar />
         <Container className="mt-4">
@@ -131,7 +124,6 @@ const Allwish = () => {
             </div>
           </div>
 
-          {/* แก้ไขส่วน Search และเพิ่มปุ่ม All Wishes */}
           <div className="d-flex justify-content-between mb-3 gap-3 align-items-center">
             <div style={{
               color: '#fff',
@@ -202,7 +194,6 @@ const Allwish = () => {
               }}>
               <thead>
                 <tr style={getPlanetHeaderStyle(selectedPlanet)}>
-                  <th>Wishes No.</th>
                   <th>ดวงดาว</th>
                   <th>ชื่อผู้อธิษฐาน</th>
                   <th>คำอธิษฐาน</th>
@@ -212,17 +203,16 @@ const Allwish = () => {
               <tbody>
                 {filteredWishes.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="text-center">ไม่พบข้อมูลคำอธิษฐาน</td>
+                    <td colSpan="4" className="text-center">ไม่พบข้อมูลคำอธิษฐาน</td>
                   </tr>
                 ) : (
-                  filteredWishes.map((wish, index) => (
+                  filteredWishes.map((wish) => (
                     <tr key={wish.id} style={{
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         background: 'rgba(0, 255, 153, 0.1)',
                       }
                     }}>
-                      <td>{index + 1}</td>
                       <td>{planets.find(p => p.id === wish.planet_id)?.name}</td>
                       <td>{wish.wisher_name}</td>
                       <td>{wish.wish_text}</td>

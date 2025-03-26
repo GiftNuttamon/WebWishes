@@ -23,9 +23,8 @@ const Login = () => {
       });
 
       if (response.data.success) {
-        // Store user data in localStorage or context if needed
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        navigate('/space'); // Navigate to Space.js
+        navigate('/space');
       } else {
         setError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }

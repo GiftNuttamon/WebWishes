@@ -15,12 +15,12 @@ const Registor = () => {
   const [success, setSuccess] = useState(false);
   const [validationStatus, setValidationStatus] = useState({
     username: { isChecking: false, isValid: true, message: '' },
-    mail: { isChecking: false, isValid: true, message: '' }
+    mail: { isChecking: false, isValid: true, message: '' },
+    password: { isValid: true, message: '' }
   });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // เพิ่ม debounce function
   const debounce = (func, wait) => {
     let timeout;
     return (...args) => {
@@ -29,7 +29,6 @@ const Registor = () => {
     };
   };
 
-  // ตรวจสอบชื่อผู้ใช้
   const checkUsername = async (username) => {
     if (!username) return;
     
@@ -60,7 +59,6 @@ const Registor = () => {
     }
   };
 
-  // ตรวจสอบอีเมล
   const checkEmail = async (email) => {
     if (!email) return;
     
@@ -91,7 +89,6 @@ const Registor = () => {
     }
   };
 
-  // สร้าง debounced versions ของฟังก์ชันตรวจสอบ
   const debouncedCheckUsername = debounce(checkUsername, 500);
   const debouncedCheckEmail = debounce(checkEmail, 500);
 
@@ -102,23 +99,29 @@ const Registor = () => {
       [name]: value
     }));
 
-    // เรียกใช้การตรวจสอบตามฟิลด์ที่มีการเปลี่ยนแปลง
     if (name === 'username') debouncedCheckUsername(value);
     if (name === 'mail') debouncedCheckEmail(value);
+    if (name === 'password') {
+      setValidationStatus(prev => ({
+        ...prev,
+        password: {
+          isValid: value.length >= 6,
+          message: value.length >= 6 ? 'รหัสผ่านถูกต้อง' : 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร'
+        }
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // ตรวจสอบการกรอกข้อมูลครบถ้วน
     if (!formData.username || !formData.password || !formData.mail) {
       setError('กรุณากรอกข้อมูลให้ครบทุกช่อง');
       return;
     }
 
-    // ตรวจสอบความถูกต้องของข้อมูล
-    if (!validationStatus.username.isValid || !validationStatus.mail.isValid) {
+    if (!validationStatus.username.isValid || !validationStatus.mail.isValid || !validationStatus.password.isValid) {
       setError('กรุณาตรวจสอบข้อมูลให้ถูกต้อง');
       return;
     }
@@ -260,7 +263,7 @@ const Registor = () => {
                           style={{
                             backgroundColor: 'rgba(45, 55, 72, 0.5)',
                             color: '#fff',
-                            border: '1px solid rgba(99, 179, 237, 0.3)'
+                            border: validationStatus.password.isValid ? '1px solid rgba(99, 179, 237, 0.3)' : '1px solid #FC8181'
                           }}
                         />
                         <Button
@@ -280,6 +283,13 @@ const Registor = () => {
                           {showPassword ? '👁️' : '👁️‍🗨️'}
                         </Button>
                       </div>
+                      {validationStatus.password.message && (
+                        <Form.Text style={{ 
+                          color: validationStatus.password.isValid ? '#9AE6B4' : '#FEB2B2'
+                        }}>
+                          {validationStatus.password.message}
+                        </Form.Text>
+                      )}
                     </Form.Group>
                     <Form.Group className="mb-4">
                       <Form.Label style={{ color: '#fff' }}>อีเมล</Form.Label>

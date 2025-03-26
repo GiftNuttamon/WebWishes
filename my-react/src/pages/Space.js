@@ -3,15 +3,18 @@ import { Container, Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 
+// คอมโพเนนต์หน้าแสดงระบบสุริยะ
 const Space = () => {
+  // กำหนด state สำหรับควบคุม Modal และดาวที่เลือก
   const [showModal, setShowModal] = useState(false);
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const navigate = useNavigate();
 
+  // ข้อมูลของดาวเคราะห์ทั้งหมด
   const planets = [
     {
       id: 'sun',
-      name: 'ดวงอาทิตย์',
+      name: 'Sun',
       image: '/img/5.png',
       info: 'ดวงอาทิตย์เป็นดาวฤกษ์ที่เป็นศูนย์กลางของระบบสุริยะ',
       belief: 'เชื่อว่าการขอพรจากดวงอาทิตย์จะช่วยเสริมพลังชีวิต อำนาจบารมี และความสำเร็จในหน้าที่การงาน',
@@ -19,67 +22,69 @@ const Space = () => {
     },
     {
       id: 'mercury',
-      name: 'ดาวพุธ',
+      name: 'Mercury',
       image: '/img/6.png',
       info: 'ดาวพุธเป็นดาวเคราะห์ที่เล็กที่สุดและอยู่ใกล้ดวงอาทิตย์ที่สุด',
       belief: 'เชื่อว่าช่วยในเรื่องการสื่อสาร การเจรจาต่อรอง การค้าขาย และสติปัญญาไหวพริบ'
     },
     {
       id: 'venus',
-      name: 'ดาวศุกร์',
+      name: 'Venus',
       image: '/img/7.png',
       info: 'ดาวศุกร์เป็นดาวเคราะห์ที่มีขนาดใกล้เคียงกับโลกมากที่สุด',
       belief: 'เชื่อว่าช่วยในเรื่องความรัก ความสัมพันธ์ ความสวยงาม และการเงิน'
     },
     {
       id: 'earth',
-      name: 'โลก',
+      name: 'Earth',
       image: '/img/8.png',
       info: 'โลกเป็นดาวเคราะห์ดวงเดียวที่ทราบว่ามีสิ่งมีชีวิตอาศัยอยู่',
       belief: 'เชื่อว่าช่วยในเรื่องความอุดมสมบูรณ์ ความมั่นคง และการเริ่มต้นใหม่'
     },
     {
       id: 'mars',
-      name: 'ดาวอังคาร',
+      name: 'Mars',
       image: '/img/9.png',
       info: 'ดาวอังคารเป็นดาวเคราะห์สีแดง ได้ชื่อว่าเป็นดาวแห่งสงคราม',
       belief: 'เชื่อว่าช่วยเสริมพลังความกล้าหาญ ความมุ่งมั่น และชัยชนะ'
     },
     {
       id: 'jupiter',
-      name: 'ดาวพฤหัสบดี',
+      name: 'Jupiter',
       image: '/img/10.png',
       info: 'ดาวพฤหัสบดีเป็นดาวเคราะห์ที่ใหญ่ที่สุดในระบบสุริยะ',
       belief: 'เชื่อว่าช่วยในเรื่องโชคลาภ ความเจริญรุ่งเรือง การศึกษา และความยุติธรรม'
     },
     {
       id: 'saturn',
-      name: 'ดาวเสาร์',
+      name: 'Saturn',
       image: '/img/11.png',
       info: 'ดาวเสาร์มีวงแหวนที่สวยงามล้อมรอบ เป็นเอกลักษณ์เฉพาะตัว',
       belief: 'เชื่อว่าช่วยในเรื่องความอดทน ความรับผิดชอบ และการเอาชนะอุปสรรค'
     },
     {
       id: 'uranus',
-      name: 'ดาวยูเรนัส',
+      name: 'Uranus',
       image: '/img/12.png',
       info: 'ดาวยูเรนัสเป็นดาวเคราะห์ที่หมุนรอบตัวเองในแนวนอน',
       belief: 'เชื่อว่าช่วยในเรื่องการเปลี่ยนแปลง ความคิดสร้างสรรค์ และนวัตกรรมใหม่ๆ'
     },
     {
       id: 'neptune',
-      name: 'ดาวเนปจูน',
+      name: 'Neptune',
       image: '/img/13.png',
       info: 'ดาวเนปจูนเป็นดาวเคราะห์ที่อยู่ไกลที่สุดในระบบสุริยะ',
       belief: 'เชื่อว่าช่วยในเรื่องจินตนาการ ความฝัน และพลังจิต'
     }
   ];
 
+  // ฟังก์ชันจัดการการคลิกที่ดาว
   const handlePlanetClick = (planet) => {
     setSelectedPlanet(planet);
     setShowModal(true);
   };
 
+  // ฟังก์ชันจัดการการคลิกปุ่มขอพร
   const handleWishClick = () => {
     if (selectedPlanet) {
       navigate(`/wish/${selectedPlanet.id}`);
@@ -88,6 +93,7 @@ const Space = () => {
 
   return (
     <>
+      {/* กำหนด CSS animations */}
       <style>
         {`
           @keyframes float {
@@ -135,7 +141,9 @@ const Space = () => {
         `}
       </style>
 
+      {/* แสดงแถบนำทาง */}
       <NavBar />
+      {/* คอนเทนเนอร์หลัก */}
       <Container
         fluid
         className="space-container vh-100 position-relative"
@@ -148,8 +156,10 @@ const Space = () => {
           backgroundRepeat: 'no-repeat'
         }}
       >
+        {/* เอฟเฟกต์พื้นหลังดาว */}
         <div className="stars" style={{ zIndex: 1 }}></div>
 
+        {/* ระบบสุริยะ */}
         <div className="solar-system"
           style={{
             position: 'relative',
@@ -188,6 +198,7 @@ const Space = () => {
             padding: '20px'
           }}>
             {planets.slice(1).map((planet, index) => {
+              // กำหนดขนาดดาวตามประเภท
               let planetSize;
               switch (planet.id) {
                 case 'jupiter': planetSize = 100; break;
@@ -235,7 +246,7 @@ const Space = () => {
           </div>
         </div>
 
-        {/* Modal */}
+        {/* Modal แสดงข้อมูลดาว */}
         <Modal
           show={showModal}
           onHide={() => setShowModal(false)}
@@ -294,4 +305,5 @@ const Space = () => {
   );
 };
 
+// ส่งออกคอมโพเนนต์ Space
 export default Space; 
