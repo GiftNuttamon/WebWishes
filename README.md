@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# 🌌 WebWishes – Make a Wish to the Stars  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> 🪐 A full-stack web application where users can send their wishes to planets and stars.  
+> Built with **React, Node.js (Express), MySQL**, and styled with **Bootstrap + custom space UI**.  
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌟 Features
+- ✨ User registration & login system (with validation for unique username/email):contentReference[oaicite:0]{index=0}  
+- 🌍 Solar system UI – choose a planet to send your wish:contentReference[oaicite:1]{index=1}  
+- 📩 Submit wishes to a selected planet and store them in MySQL:contentReference[oaicite:2]{index=2}  
+- 📜 View all wishes sorted by latest submissions:contentReference[oaicite:3]{index=3}  
+- 🌌 Interactive cosmic design with animations (hover planets, twinkling stars, blur effects):contentReference[oaicite:4]{index=4}  
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📂 Repository Structure
+- **Frontend (React)**
+  - `App.js`, `WishPage.js`, `pages/` → Main React components & routes:contentReference[oaicite:5]{index=5}:contentReference[oaicite:6]{index=6}  
+  - `App.css`, `index.css` → Styling (space theme, planets, stars, wish cards):contentReference[oaicite:7]{index=7}:contentReference[oaicite:8]{index=8}  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Backend (Node.js / Express)**
+  - `app.js` → REST API (register, login, check username/email, submit wish, fetch wishes):contentReference[oaicite:9]{index=9}  
+  - `database.js` → MySQL connection config:contentReference[oaicite:10]{index=10}  
 
-### `npm test`
+- **Database**
+  - MySQL schema with `users` and `wishes` tables:contentReference[oaicite:11]{index=11}  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Other**
+  - `package.json` → dependencies & scripts:contentReference[oaicite:12]{index=12}  
+  - `App.test.js` → React test boilerplate:contentReference[oaicite:13]{index=13}  
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🚀 How to Run
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 1. Clone the repository
+```bash
+git clone https://github.com/GiftNuttamon/WebWishes.git
+cd WebWishes
+```
+### 2. Setup Backend
+```bash
+cd backend
+npm install
+npm run dev   # start backend server on port 3001
+```
+### 3. Setup Frontend
+```bash
+cd frontend
+npm install
+npm start   # start frontend on port 3000
+```
+### 4. Database Setup
+```bash
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Import schema into MySQL:
 
-### `npm run eject`
+CREATE DATABASE myweb;
+USE myweb;
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) UNIQUE,
+  password VARCHAR(100),
+  mail VARCHAR(100) UNIQUE
+);
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+CREATE TABLE wishes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  planet_id VARCHAR(50),
+  wisher_name VARCHAR(100),
+  wish_text TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 🛠 Tech Stack
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Frontend: React, React Router, Bootstrap
 
-## Learn More
+Backend: Node.js, Express, CORS
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### app
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Database: MySQL
 
-### Code Splitting
+Languages: JavaScript (ES6), SQL
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Deployment: Localhost / future hosting on Firebase or Vercel
 
-### Analyzing the Bundle Size
+### 📌 Use Case
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+🎓 Academic project demonstrating full-stack development
 
-### Making a Progressive Web App
+⭐ Social app concept for sharing wishes to planets and stars
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+🧑‍💻 Practice in React + Express + MySQL integration
 
-### Advanced Configuration
+### ❤️ Credits
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Developed by Nuttamon Chanseeda (Gift) – Computer Engineering, TNI
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+# ✅ Description  
+> 🌌 Full-stack web app where users can register, log in, and send wishes to planets. Built with React, Node.js (Express), and MySQL, featuring space-themed UI and interactive cosmic animations.  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
